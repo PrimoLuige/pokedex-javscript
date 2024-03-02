@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>Pokedéx</title>
+    <link href="index.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="main">
+        <h2>Pokedex</h2>
+        <input type="text" name="quantidade" placeholder="Insira quantidade de pokemons..." style="width:100%; height:40px;padding-left:10px;" id="quantidade"/>
+        <div class="pokemon-boxes">
+
+        </div>
+    </div>
+    
+    
+        
+    
+<script>
+    var quantidade = document.getElementById('quantidade');
+    quantidade.addEventListener('keyup',()=>{
+        pegaPokemons(quantidade.value);
+    })
+    pegaPokemons(30)
+    function pegaPokemons(quantidade){
+    fetch ('https://pokeapi.co/api/v2/pokemon?limit='+quantidade)
+    .then(response => response.json())
+    .then(allpokemon => {
+        var pokemons = [];
+        allpokemon.results.map((val)=>{
+    fetch(val.url)
+    .then(response => response.json())
+    
+    .then(pokemonSingle => {
+        pokemons.push({nome:val.name,imagem:pokemonSingle.sprites.front_default});
+        if (pokemons.length == quantidade){
+            var pokemonboxes = document.querySelector('.pokemon-boxes');
+            pokemonboxes.innerHTML = "";
+    pokemons.map(function(val){pokemonboxes.innerHTML+='<div class="pokemon-box"><img src="'+val.imagem+'"/><p>'+val.nome+'</p></div>';
+    
+    })}
+    })
+    })
+        })}
+        
+    
+</script>
+</body>
+</html>
